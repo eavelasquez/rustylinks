@@ -3,12 +3,9 @@ struct Node {
     next: Link,
 }
 
-enum Link {
-    Empty,
-    More(Box<Node>),
-}
+type Link = Option<Box<Node>>;
 
-struct List {
+struct LinkedList {
     head: Link,
 }
 
@@ -18,10 +15,10 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let link = Link::More(Box::new(Node {
+        let link = Some(Box::new(Node {
             elem: 1,
-            next: Link::Empty,
+            next: None,
         }));
-        let list = List { head: link };
+        let list = LinkedList { head: link };
     }
 }
