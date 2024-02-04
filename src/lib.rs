@@ -1,3 +1,25 @@
+pub struct LinkedList {
+    head: Link,
+}
+
+impl LinkedList {
+    fn empty() -> LinkedList {
+        LinkedList { head: None }
+    }
+
+    fn push(&mut self, element: u32) {
+        match self.head {
+            None => {
+                self.head = Some(Box::new(Node {
+                    elem: element,
+                    next: None,
+                }))
+            }
+            Some(_) => todo!(),
+        }
+    }
+}
+
 struct Node {
     elem: u32,
     next: Link,
@@ -5,20 +27,13 @@ struct Node {
 
 type Link = Option<Box<Node>>;
 
-struct LinkedList {
-    head: Link,
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn it_works() {
-        let link = Some(Box::new(Node {
-            elem: 1,
-            next: None,
-        }));
-        let list = LinkedList { head: link };
+        let mut linked_list = LinkedList::empty();
+        linked_list.push(1024);
     }
 }
