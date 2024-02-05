@@ -106,4 +106,20 @@ mod tests {
         assert_eq!(linked_list.pop(), Some(1024));
         assert_eq!(linked_list.pop(), None);
     }
+
+    #[test]
+    fn into_iter() {
+        let mut linked_list = LinkedList::empty();
+
+        linked_list.push(1024);
+        linked_list.push(2048);
+        linked_list.push(3072);
+
+        let mut iter = linked_list.into_iter();
+
+        assert_eq!(iter.next(), Some(3072));
+        assert_eq!(iter.next(), Some(2048));
+        assert_eq!(iter.next(), Some(1024));
+        assert_eq!(iter.next(), None);
+    }
 }
