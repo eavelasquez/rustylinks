@@ -22,6 +22,13 @@ impl LinkedList {
             n.elem
         })
     }
+
+    fn peak(&mut self) -> Option<&u32> {
+        match &self.head {
+            None => None,
+            Some(n) => Some(&n.elem),
+        }
+    }
 }
 
 struct Node {
