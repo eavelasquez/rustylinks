@@ -9,7 +9,19 @@ struct Node<T> {
     next: Link<T>,
 }
 
+pub trait Iterator {
+    type Item;
+
+    fn next(&mut self) -> Option<Self::Item>;
+}
+
+pub struct IntoIter<T>(LinkedList<T>);
+
 impl<T> LinkedList<T> {
+    pub fn into_iter(self) -> IntoIter<T> {
+        IntoIter(self)
+    }
+
     fn empty() -> Self {
         LinkedList { head: None }
     }
@@ -44,6 +56,14 @@ impl<T> Drop for LinkedList<T> {
         while let Some(mut n) = current_head {
             current_head = n.next.take();
         }
+    }
+}
+
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.pop()
     }
 }
 
