@@ -2,8 +2,15 @@ pub struct LinkedList<T> {
     head: Link<T>,
 }
 
+type Link<T> = Option<Box<Node<T>>>;
+
+struct Node<T> {
+    elem: T,
+    next: Link<T>,
+}
+
 impl<T> LinkedList<T> {
-    fn empty() -> LinkedList<T> {
+    fn empty() -> Self {
         LinkedList { head: None }
     }
 
@@ -27,12 +34,14 @@ impl<T> LinkedList<T> {
     }
 }
 
-struct Node<T> {
-    elem: T,
-    next: Link<T>,
+impl<T> Drop for LinkedList<T> {
+    fn drop(&mut self) {
+        let mut current_head = self.head.take();
+        while let Some(mut n) = current_head {
+            current_head = n.next.take();
+        }
+    }
 }
-
-type Link<T> = Option<Box<Node<T>>>;
 
 #[cfg(test)]
 mod tests {
