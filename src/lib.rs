@@ -16,6 +16,17 @@ impl LinkedList {
 
         self.head = Some(new_head);
     }
+
+    fn pop(&mut self) -> Option<u32> {
+        let old_head = self.head.take();
+        match old_head {
+            None => None,
+            Some(n) => {
+                self.head = n.next;
+                Some(n.elem)
+            },
+        }
+    }
 }
 
 struct Node {
