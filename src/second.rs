@@ -9,36 +9,7 @@ struct Node<T> {
     next: Link<T>,
 }
 
-pub trait Iterator {
-    type Item;
-
-    fn next(&mut self) -> Option<Self::Item>;
-}
-
-pub struct Iter<'a, T> {
-    next: Option<&'a Node<T>>,
-}
-
-pub struct IntoIter<T>(LinkedList<T>);
-
 impl<T> LinkedList<T> {
-    pub fn into_iter(self) -> IntoIter<T> {
-        IntoIter(self)
-    }
-
-    pub fn iter<'a>(&'a self) -> Iter<'a, T> {
-        Iter {
-            next: self.head.as_deref(),
-        }
-    }
-
-
-    pub fn iter_mut(&mut self) -> IterMut<'_, T> {
-        IterMut {
-            next: self.head.as_deref_mut(),
-        }
-    }
-
     fn empty() -> Self {
         LinkedList { head: None }
     }
@@ -65,6 +36,22 @@ impl<T> LinkedList<T> {
     fn peek_mut(&mut self) -> Option<&mut T> {
         self.head.as_mut().map(|n| &mut n.elem)
     }
+
+    pub fn into_iter(self) -> IntoIter<T> {
+        IntoIter(self)
+    }
+
+    pub fn iter(&self) -> Iter<'_, T> {
+        Iter {
+            next: self.head.as_deref(),
+        }
+    }
+
+    pub fn iter_mut(&mut self) -> IterMut<'_, T> {
+        IterMut {
+            next: self.head.as_deref_mut(),
+        }
+    }
 }
 
 impl<T> Drop for LinkedList<T> {
@@ -74,6 +61,21 @@ impl<T> Drop for LinkedList<T> {
             current_head = n.next.take();
         }
     }
+}
+
+pub struct IntoIter<T>(LinkedList<T>);
+
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        // note: we can use self.0 here because IntoIter is a tuple struct
+        self.0.pop()
+    }
+}
+
+pub struct Iter<'a, T> {
+    next: Option<&'a Node<T>>,
 }
 
 impl<'a, T> Iterator for Iter<'a, T> {
