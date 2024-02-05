@@ -106,10 +106,10 @@ impl<'a, T> Iterator for IterMut<'a, T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::LinkedList;
 
     #[test]
-    fn it_works() {
+    fn basics() {
         let mut linked_list = LinkedList::empty();
 
         // Check empty linked list behaves right
@@ -128,20 +128,38 @@ mod tests {
         linked_list.push(4096);
         linked_list.push(5120);
 
-        // Check peak
-        assert_eq!(linked_list.peak(), Some(&5120));
-
-        // Check peak mut
-        linked_list.peek_mut().map(|value| *value = 6144);
-        assert_eq!(linked_list.peek_mut(), Some(&mut 6144));
-
         // Check normal removal
-        assert_eq!(linked_list.pop(), Some(6144));
+        assert_eq!(linked_list.pop(), Some(5120));
         assert_eq!(linked_list.pop(), Some(4096));
 
         // Check exhaustion
         assert_eq!(linked_list.pop(), Some(1024));
         assert_eq!(linked_list.pop(), None);
+    }
+
+    #[test]
+    fn peek() {
+        let mut linked_list = LinkedList::empty();
+
+        // Check empty linked list behaves right
+        assert_eq!(linked_list.peak(), None);
+        assert_eq!(linked_list.peek_mut(), None);
+
+        // Populate linked list
+        linked_list.push(1024);
+        linked_list.push(2048);
+        linked_list.push(3072);
+
+        // Check peak
+        assert_eq!(linked_list.peak(), Some(&3072));
+
+        // Check peak mut
+        assert_eq!(linked_list.peek_mut(), Some(&mut 3072));
+        linked_list.peek_mut().map(|value| *value = 4096);
+        assert_eq!(linked_list.peek_mut(), Some(&mut 4096));
+
+        // Check normal removal
+        assert_eq!(linked_list.pop(), Some(4096));
     }
 
     #[test]
@@ -173,6 +191,20 @@ mod tests {
         assert_eq!(iter.next(), Some(&3072));
         assert_eq!(iter.next(), Some(&2048));
         assert_eq!(iter.next(), Some(&1024));
-        assert_eq!(iter.next(), None);
+    }
+
+    #[test]
+    fn iter_mut() {
+        let mut linked_list = LinkedList::empty();
+
+        linked_list.push(1024);
+        linked_list.push(2048);
+        linked_list.push(3072);
+
+        let mut iter = linked_list.iter_mut();
+
+        assert_eq!(iter.next(), Some(&mut 3072));
+        assert_eq!(iter.next(), Some(&mut 2048));
+        assert_eq!(iter.next(), Some(&mut 1024));
     }
 }
