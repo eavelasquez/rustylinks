@@ -32,6 +32,10 @@ impl<T> LinkedList<T> {
     fn peak(&self) -> Option<&T> {
         self.head.as_ref().map(|n| &n.elem)
     }
+
+    fn peek_mut(&mut self) -> Option<&mut T> {
+        self.head.as_mut().map(|n| &mut n.elem)
+    }
 }
 
 impl<T> Drop for LinkedList<T> {
