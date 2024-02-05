@@ -15,11 +15,21 @@ pub trait Iterator {
     fn next(&mut self) -> Option<Self::Item>;
 }
 
+pub struct Iter<'a, T> {
+    next: Option<&'a Node<T>>,
+}
+
 pub struct IntoIter<T>(LinkedList<T>);
 
 impl<T> LinkedList<T> {
     pub fn into_iter(self) -> IntoIter<T> {
         IntoIter(self)
+    }
+
+    pub fn iter<'a>(&'a self) -> Iter<'a, T> {
+        Iter {
+            next: self.head.as_deref(),
+        }
     }
 
     fn empty() -> Self {
@@ -59,11 +69,14 @@ impl<T> Drop for LinkedList<T> {
     }
 }
 
-impl<T> Iterator for IntoIter<T> {
-    type Item = T;
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.0.pop()
+        self.next.map(|n| {
+            self.next = n.next.as_deref();
+            &n.elem
+        })
     }
 }
 
