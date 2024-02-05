@@ -12,7 +12,6 @@ impl<T> LinkedList<T> {
             elem: element,
             next: self.head.take(),
         });
-
         self.head = Some(new_head);
     }
 
@@ -42,7 +41,32 @@ mod tests {
     #[test]
     fn it_works() {
         let mut linked_list = LinkedList::empty();
+
+        // Check empty linked list behaves right
+        assert_eq!(linked_list.pop(), None);
+
+        // Populate linked list
         linked_list.push(1024);
         linked_list.push(2048);
+        linked_list.push(3072);
+
+        // Check normal removal
+        assert_eq!(linked_list.pop(), Some(3072));
+        assert_eq!(linked_list.pop(), Some(2048));
+
+        // Push some more just to make sure nothing's corrupted
+        linked_list.push(4096);
+        linked_list.push(5120);
+
+        // Check peak
+        assert_eq!(linked_list.peak(), Some(&5120));
+
+        // Check normal removal
+        assert_eq!(linked_list.pop(), Some(5120));
+        assert_eq!(linked_list.pop(), Some(4096));
+
+        // Check exhaustion
+        assert_eq!(linked_list.pop(), Some(1024));
+        assert_eq!(linked_list.pop(), None);
     }
 }
