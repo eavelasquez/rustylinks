@@ -24,10 +24,7 @@ impl LinkedList {
     }
 
     fn peak(&mut self) -> Option<&u32> {
-        match &self.head {
-            None => None,
-            Some(n) => Some(&n.elem),
-        }
+        self.head.as_ref().map(|n| &n.elem)
     }
 }
 
