@@ -74,8 +74,12 @@ mod tests {
         // Check peak
         assert_eq!(linked_list.peak(), Some(&5120));
 
+        // Check peak mut
+        linked_list.peek_mut().map(|value| *value = 6144);
+        assert_eq!(linked_list.peek_mut(), Some(&mut 6144));
+
         // Check normal removal
-        assert_eq!(linked_list.pop(), Some(5120));
+        assert_eq!(linked_list.pop(), Some(6144));
         assert_eq!(linked_list.pop(), Some(4096));
 
         // Check exhaustion
