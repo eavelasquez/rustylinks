@@ -8,18 +8,16 @@ impl LinkedList {
     }
 
     fn push(&mut self, element: u32) {
-        let old_head = self.head.take();
         let new_head = Box::new(Node {
             elem: element,
-            next: old_head,
+            next: self.head.take(),
         });
 
         self.head = Some(new_head);
     }
 
     fn pop(&mut self) -> Option<u32> {
-        let old_head = self.head.take();
-        old_head.map(|n| {
+        self.head.take().map(|n| {
             self.head = n.next;
             n.elem
         })
