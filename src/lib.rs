@@ -8,15 +8,13 @@ impl LinkedList {
     }
 
     fn push(&mut self, element: u32) {
-        match self.head {
-            None => {
-                self.head = Some(Box::new(Node {
-                    elem: element,
-                    next: None,
-                }))
-            }
-            Some(_) => todo!(),
-        }
+        let old_head = self.head.take();
+        let new_head = Box::new(Node {
+            elem: element,
+            next: old_head,
+        });
+
+        self.head = Some(new_head);
     }
 }
 
@@ -35,5 +33,6 @@ mod tests {
     fn it_works() {
         let mut linked_list = LinkedList::empty();
         linked_list.push(1024);
+        linked_list.push(2048);
     }
 }
