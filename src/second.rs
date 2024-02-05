@@ -32,6 +32,13 @@ impl<T> LinkedList<T> {
         }
     }
 
+
+    pub fn iter_mut(&mut self) -> IterMut<'_, T> {
+        IterMut {
+            next: self.head.as_deref_mut(),
+        }
+    }
+
     fn empty() -> Self {
         LinkedList { head: None }
     }
@@ -76,6 +83,21 @@ impl<'a, T> Iterator for Iter<'a, T> {
         self.next.map(|n| {
             self.next = n.next.as_deref();
             &n.elem
+        })
+    }
+}
+
+pub struct IterMut<'a, T> {
+    next: Option<&'a mut Node<T>>,
+}
+
+impl<'a, T> Iterator for IterMut<'a, T> {
+    type Item = &'a mut T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.take().map(|n| {
+            self.next = n.next.as_deref_mut();
+            &mut n.elem
         })
     }
 }
